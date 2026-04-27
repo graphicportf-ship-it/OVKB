@@ -343,49 +343,23 @@ function initSmoothScroll() {
 
 function initContactForm() {
     const form = document.getElementById('contact-form');
-    const status = document.getElementById('form-status');
-    
     if (!form) return;
     
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const formData = new FormData(form);
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
         
-        // Show loading state
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending...';
+        const name = document.getElementById('name').value;
+        const userWhatsapp = document.getElementById('whatsapp').value;
+        const message = document.getElementById('message').value;
         
-        try {
-            const response = await fetch(form.action, {
-                method: form.method,
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            });
-            
-            if (response.ok) {
-                status.style.display = 'block';
-                status.className = 'mt-3 text-center text-success fw-bold p-3 rounded-3 bg-success-subtle border border-success';
-                status.innerHTML = '✨ Message sent successfully! We\'ll get back to you soon.';
-                form.reset();
-            } else {
-                const data = await response.json();
-                throw new Error(data.errors ? data.errors.map(e => e.message).join(", ") : 'Oops! There was a problem.');
-            }
-        } catch (error) {
-            status.style.display = 'block';
-            status.className = 'mt-3 text-center text-danger fw-bold p-3 rounded-3 bg-danger-subtle border border-danger';
-            status.innerHTML = '❌ ' + error.message;
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
-            
-            // Hide status after 5 seconds
-            setTimeout(() => {
-                status.style.display = 'none';
-            }, 5000);
-        }
+        const phone = "94777489095";
+        const text = encodeURIComponent(`Hi! I'm ${name}. \nMy WhatsApp: ${userWhatsapp}\n\nMessage: ${message}`);
+        
+        // Open WhatsApp
+        window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+        
+        // Optionally reset form
+        form.reset();
     });
 }
 
